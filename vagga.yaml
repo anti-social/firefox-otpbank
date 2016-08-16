@@ -6,7 +6,15 @@ containers:
     - !Install
       - firefox
       - icedtea-plugin
+    # Java can't see HOME environment variable, so we create a special user
+    - !Sh "groupadd --gid 1000 myself"
+    - !Sh "useradd myself --home-dir /home/myself --gid 1000 -M --uid 1000"
+    - !EnsureDir /home/myself
+    environ:
+      # DISPLAY: ":0"
+      XDG_RUNTIME_DIR: /tmp
     volumes:
+      /home/myself: !Persistent home
       /tmp: !Tmpfs
         size: 100Mi
         mode: 0o1777
@@ -17,5 +25,13 @@ containers:
 commands:
   firefox: !Command
     container: firefox-with-java
-    environ: { HOME: /work/home }
+    user-id: 1000
+    external-user-id: 0
+    prerequisites: [_touch-xauth]
+    volumes:
+      /home/myself/.Xauthority: !BindRO /volumes/x-authority
     run: [firefox, --no-remote]
+
+  _touch-xauth: !Command
+    container: firefox-with-java
+    run: [touch, /home/myself/.Xauthority]
