@@ -1,7 +1,7 @@
 containers:
-  firefox-with-java:
+  firefox:
     setup:
-    - !Ubuntu trusty
+    - !Ubuntu xenial
     - !UbuntuUniverse
     - !Install
       - firefox
@@ -10,6 +10,11 @@ containers:
     - !Sh "groupadd --gid 1000 myself"
     - !Sh "useradd myself --home-dir /home/myself --gid 1000 -M --uid 1000"
     - !EnsureDir /home/myself
+    - !Tar
+      url: https://download.mozilla.org/?product=firefox-52.0.1esr-SSL&os=linux64&lang=en-US
+      sha256: 33a854915df70646d83a191fbad864a539bfd52b7d82e8f58e05abbbf5408dde
+      path: /opt
+    - !Sh ln -s /opt/firefox/firefox /usr/local/bin/firefox-esr
     environ:
       # DISPLAY: ":0"
       XDG_RUNTIME_DIR: /tmp
@@ -24,14 +29,14 @@ containers:
 
 commands:
   firefox: !Command
-    container: firefox-with-java
+    container: firefox
     user-id: 1000
     external-user-id: 0
     prerequisites: [_touch-xauth]
     volumes:
       /home/myself/.Xauthority: !BindRO /volumes/x-authority
-    run: [firefox, --no-remote]
+    run: [firefox-esr, --no-remote]
 
   _touch-xauth: !Command
-    container: firefox-with-java
+    container: firefox
     run: [touch, /home/myself/.Xauthority]
