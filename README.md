@@ -25,11 +25,11 @@
   
   ```sh
   cp -r ~/.keys ./keys
-  make firefox
+  ./firefox.sh
   ```
   
   Or
   
   ```sh
-  make firefox keys_dir=~/.keys
+  ./firefox.sh ~/.keys
   ```
