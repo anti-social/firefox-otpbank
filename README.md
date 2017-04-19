@@ -31,5 +31,5 @@
   Or
   
   ```sh
-  ./firefox.sh ~/.keys
+  OTP_KEYS_DIR=~/.keys ./firefox.sh
   ```
