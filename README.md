@@ -16,7 +16,9 @@
   * Configuration:
     
     ```sh
-    echo "external-volumes:\n  X11: /tmp/.X11-unix/\n  x-authority: $HOME/.Xauthority" > ~/vagga.yaml
+    echo "external-volumes:
+      X11: /tmp/.X11-unix/
+      x-authority: $HOME/.Xauthority" > ~/vagga.yaml
     ```
 
 2. Run:
